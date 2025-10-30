@@ -1,6 +1,6 @@
-package com.ai.auth.dto;
+package com.ai.api.auth.dto;
 
-import com.ai.auth.domain.AdminRole;
+import com.ai.api.auth.domain.AdminRole;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

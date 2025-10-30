@@ -1,4 +1,4 @@
-package com.ai.auth.dto;
+package com.ai.api.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,6 +1,5 @@
 package com.ai.common.security;
 
-import com.ai.auth.service.AuthService;
 import com.ai.common.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

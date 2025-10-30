@@ -35,15 +35,11 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // 인증 없이 접근 가능한 경로
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/api/public/test").permitAll()
-                .requestMatchers("/error").permitAll()
 
                 // ROLE_ADMIN 접근 가능한 특정 조직 관리 기능
                 .requestMatchers("/admin/**", "api/admin/test").hasAuthority("ROLE_ADMIN")
 
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

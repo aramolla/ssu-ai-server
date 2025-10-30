@@ -1,13 +1,13 @@
-package com.ai.auth.service;
+package com.ai.api.auth.service;
 
-import com.ai.auth.domain.AdminRole;
-import com.ai.auth.domain.User;
-import com.ai.auth.dto.LoginDTO;
-import com.ai.auth.dto.RefreshTokenDTO;
-import com.ai.auth.dto.SignUpDTO;
-import com.ai.auth.dto.TokenInfoDTO;
-import com.ai.auth.dto.UserInfoDTO;
-import com.ai.auth.repository.UserRepository;
+import com.ai.api.auth.repository.UserRepository;
+import com.ai.api.auth.domain.AdminRole;
+import com.ai.api.auth.domain.User;
+import com.ai.api.auth.dto.LoginDTO;
+import com.ai.api.auth.dto.RefreshTokenDTO;
+import com.ai.api.auth.dto.SignUpDTO;
+import com.ai.api.auth.dto.TokenInfoDTO;
+import com.ai.api.auth.dto.UserInfoDTO;
 import com.ai.common.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

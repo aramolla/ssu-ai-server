@@ -1,4 +1,4 @@
-package com.ai.auth.controller;
+package com.ai.api.auth.controller;
 
 import java.util.HashMap;
 import java.util.Map;

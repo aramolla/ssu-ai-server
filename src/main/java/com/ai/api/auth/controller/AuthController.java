@@ -1,12 +1,12 @@
-package com.ai.auth.controller;
+package com.ai.api.auth.controller;
 
-import com.ai.auth.dto.LoginDTO;
-import com.ai.auth.dto.MessageDTO;
-import com.ai.auth.dto.RefreshTokenDTO;
-import com.ai.auth.dto.SignUpDTO;
-import com.ai.auth.dto.TokenInfoDTO;
-import com.ai.auth.dto.UserInfoDTO;
-import com.ai.auth.service.AuthService;
+import com.ai.api.auth.service.AuthService;
+import com.ai.api.auth.dto.LoginDTO;
+import com.ai.api.auth.dto.MessageDTO;
+import com.ai.api.auth.dto.RefreshTokenDTO;
+import com.ai.api.auth.dto.SignUpDTO;
+import com.ai.api.auth.dto.TokenInfoDTO;
+import com.ai.api.auth.dto.UserInfoDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

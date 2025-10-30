@@ -1,6 +1,6 @@
-package com.ai.auth.repository;
+package com.ai.api.auth.repository;
 
-import com.ai.auth.domain.User;
+import com.ai.api.auth.domain.User;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

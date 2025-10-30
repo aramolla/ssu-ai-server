@@ -1,4 +1,4 @@
-package com.ai.auth.dto;
+package com.ai.api.auth.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

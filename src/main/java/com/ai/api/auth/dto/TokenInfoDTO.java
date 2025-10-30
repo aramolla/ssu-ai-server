@@ -1,6 +1,6 @@
-package com.ai.auth.dto;
+package com.ai.api.auth.dto;
 
-import com.ai.auth.domain.AdminRole;
+import com.ai.api.auth.domain.AdminRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,9 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserInfoDTO {
-    private Long id;
+public class TokenInfoDTO {
+    private String grantType;
+    private String accessToken;
+    private String refreshToken;
+    private Long userId;
     private String username;
-    private String password;
     private AdminRole role;
+
 }

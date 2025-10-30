@@ -1,4 +1,4 @@
-package com.ai.auth.domain;
+package com.ai.api.auth.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
