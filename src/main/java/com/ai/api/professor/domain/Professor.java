@@ -59,18 +59,25 @@ public class Professor {
     private LocalDateTime createTime;
 
     public void addHistory(ProfessorHistory history) {
-        historise.add(history);
+        if (this.historise == null) {
+            this.historise = new ArrayList<>();
+        }
+        this.historise.add(history);
         history.setProfessor(this);
     }
 
     public void removeHistory(ProfessorHistory history) {
-        historise.remove(history);
-        history.setProfessor(null);
+        if (this.historise != null) {
+            this.historise.remove(history);
+            history.setProfessor(null);
+        }
     }
 
     public void clearHistories() {
-        historise.forEach(history -> history.setProfessor(null));
-        historise.clear();
+        if (this.historise != null) {
+            this.historise.forEach(history -> history.setProfessor(null));
+            this.historise.clear();
+        }
     }
 
 

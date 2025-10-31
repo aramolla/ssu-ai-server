@@ -25,13 +25,13 @@ public class ProfessorHistory {
     private Professor professor;
 
     // 기관명
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String institution;
     // 부서
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String department;
     // 직책
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String position;
 
 

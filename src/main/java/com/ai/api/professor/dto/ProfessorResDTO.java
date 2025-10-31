@@ -31,6 +31,13 @@ public class ProfessorResDTO {
 
     public static ProfessorResDTO from(Professor professor) {
 
+        List<HistoryDTO> historise = new ArrayList<>();
+        if (professor.getHistorise()!=null){
+            historise = professor.getHistorise().stream()
+                .map(HistoryDTO::from)
+                .collect(Collectors.toList());
+        }
+
         return ProfessorResDTO.builder()
             .id(professor.getId())
             .professorName(professor.getProfessorName())
@@ -40,9 +47,7 @@ public class ProfessorResDTO {
             .office(professor.getOffice())
             .tel(professor.getTel())
             .thumbnailUrl(professor.getThumnailPath())
-            .historise(professor.getHistorise().stream()
-                .map(HistoryDTO::from)
-                .collect(Collectors.toList()))
+            .historise(historise)
             .createdAt(professor.getCreateTime())
             .build();
     }

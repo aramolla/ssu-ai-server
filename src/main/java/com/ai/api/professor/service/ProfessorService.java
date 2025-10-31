@@ -18,13 +18,11 @@ public class ProfessorService {
 
     private final ProfessorRepository professorRepository;
 
-    // 목록 조회
     public List<Professor> getAllProfessors(Pageable pageable) {
         List<Professor> professors = professorRepository.findAll(pageable).getContent();
         return professors;
     }
 
-    // 생성
     public Professor addProfessor(ProfessorReqDTO professorReq) {
         Professor professor = Professor.builder()
             .professorName(professorReq.getProfessorName())
@@ -47,7 +45,6 @@ public class ProfessorService {
         return savePro;
     }
 
-    // 수정
     public Professor updateProfessor(Long id, ProfessorReqDTO professorReq) {
         Professor existingProfessor = professorRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Professor not found"));
@@ -71,7 +68,6 @@ public class ProfessorService {
         return professorRepository.save(existingProfessor);
     }
 
-    // 삭제
     public void deleteProfessor(Long id) {
         professorRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Professor not found"));
