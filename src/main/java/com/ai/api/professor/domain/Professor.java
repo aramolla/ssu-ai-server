@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Data
 @Builder
 public class Professor {
+    // TODO: 공지 여부(Y/N) 필요한지 확인
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
@@ -44,16 +46,17 @@ public class Professor {
     private String major; // 연구 분야
 
     @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @Builder.Default
-    private List<ProfessorHistory> historise = new ArrayList<>(); //경력
+    private List<ProfessorHistory> historise = new ArrayList<>();
+    //TODO: String 1개로 전달 받는지 확인 필요
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String office;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String tel;
 
-    private String thumnailPath;
+    @OneToOne(mappedBy = "professor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ProfessorImage image;
 
     @CreationTimestamp
     private LocalDateTime createTime;

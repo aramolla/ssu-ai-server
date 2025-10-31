@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor
@@ -29,27 +30,10 @@ public class ProfessorReqDTO {
     @Valid
     private List<HistoryDTO> historise = new ArrayList<>();
 
+    private MultipartFile image;
+
     private String office;
     private String tel;
 
-    public Professor toEntity(){
-        Professor professor = new Professor();
-        professor.setProfessorName(this.professorName);
-        professor.setProfessorEmail(this.professorEmail);
-        professor.setDepartment(this.department);
-        professor.setMajor(this.major);
-        professor.setOffice(this.office);
-        professor.setTel(this.tel);
-
-        if(this.historise != null){
-            List<ProfessorHistory> professorHistories = new ArrayList<>();
-            for(HistoryDTO historyDTO : this.historise){
-                professorHistories.add(historyDTO.toEntity());
-            }
-            professor.setHistorise(professorHistories);
-        }
-
-        return professor;
-    }
 
 }

@@ -21,7 +21,7 @@ public class ProfessorHistory {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "professor_id")
+    @JoinColumn(name = "professor_id") // 외래키, ProfessorHistory가 주인 테이블
     private Professor professor;
 
     // 기관명

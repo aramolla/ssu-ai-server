@@ -2,6 +2,7 @@ package com.ai.api.professor.dto;
 
 import com.ai.api.professor.domain.Professor;
 import com.ai.api.professor.domain.ProfessorHistory;
+import com.ai.api.professor.domain.ProfessorImage;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class ProfessorResDTO {
     private String major;
     private String office;
     private String tel;
-    private String thumbnailUrl;
+    private String image;
 
     private List<HistoryDTO> historise = new ArrayList<>();
 
@@ -38,6 +39,12 @@ public class ProfessorResDTO {
                 .collect(Collectors.toList());
         }
 
+        String existImage = null;
+        if (professor.getImage()!=null){
+            existImage = professor.getImage().getImagePath();
+        }
+
+
         return ProfessorResDTO.builder()
             .id(professor.getId())
             .professorName(professor.getProfessorName())
@@ -46,7 +53,7 @@ public class ProfessorResDTO {
             .major(professor.getMajor())
             .office(professor.getOffice())
             .tel(professor.getTel())
-            .thumbnailUrl(professor.getThumnailPath())
+            .image(existImage)
             .historise(historise)
             .createdAt(professor.getCreateTime())
             .build();
