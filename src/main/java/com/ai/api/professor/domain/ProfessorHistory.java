@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "professor_histories")
@@ -22,6 +23,7 @@ public class ProfessorHistory {
 
     @ManyToOne
     @JoinColumn(name = "professor_id") // 외래키, ProfessorHistory가 주인 테이블
+    @ToString.Exclude
     private Professor professor;
 
     // 기관명

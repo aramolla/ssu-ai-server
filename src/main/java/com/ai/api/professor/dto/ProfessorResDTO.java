@@ -1,8 +1,6 @@
 package com.ai.api.professor.dto;
 
 import com.ai.api.professor.domain.Professor;
-import com.ai.api.professor.domain.ProfessorHistory;
-import com.ai.api.professor.domain.ProfessorImage;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

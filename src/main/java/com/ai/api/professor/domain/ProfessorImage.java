@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
@@ -40,6 +41,7 @@ public class ProfessorImage {
 
     @OneToOne
     @JoinColumn(name = "professor_id", unique = true) // 외래키, ProfessorImage가 주인 테이블
+    @ToString.Exclude
     private Professor professor;
 
     @Column(nullable = false)

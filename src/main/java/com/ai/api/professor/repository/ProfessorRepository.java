@@ -16,8 +16,6 @@ public interface ProfessorRepository extends JpaRepository<Professor, Long> {
 
     Optional<Professor> findById(Long Id);
 
-//    List<Professor> findByProfessorNameContaining(String professorName);
-
     @Query("SELECT p FROM Professor p WHERE " +
         "p.professorName LIKE %:keyword% OR " +
         "p.professorEmail LIKE %:keyword% OR " +
@@ -26,8 +24,5 @@ public interface ProfessorRepository extends JpaRepository<Professor, Long> {
         "p.office LIKE %:keyword% OR " +
         "p.tel LIKE %:keyword%")
     Page<Professor> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
-
-    Page<Professor> findByProfessorNameContaining(String name, Pageable pageable);
-    Page<Professor> findByDepartment(String Department, Pageable pageable);
 
 }

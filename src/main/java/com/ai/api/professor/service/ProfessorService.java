@@ -95,7 +95,7 @@ public class ProfessorService {
             .orElseThrow(() -> new RuntimeException("Professor not found"));
 
         if(delProfessor.getImage() != null){
-            fileService.deleteImage(id);
+            fileService.deleteImage(delProfessor.getImage().getId());
         }
         professorRepository.deleteById(id);
         log.info("교수 정보 삭제 완료: {}", delProfessor.getProfessorName());
