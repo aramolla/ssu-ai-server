@@ -26,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/professor")
+@RequestMapping("/professors")
 public class ProfessorController {
 
     private final ProfessorService professorService;
