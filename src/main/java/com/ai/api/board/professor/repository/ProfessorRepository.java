@@ -1,6 +1,6 @@
-package com.ai.api.professor.repository;
+package com.ai.api.board.professor.repository;
 
-import com.ai.api.professor.domain.Professor;
+import com.ai.api.board.domain.Professor;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

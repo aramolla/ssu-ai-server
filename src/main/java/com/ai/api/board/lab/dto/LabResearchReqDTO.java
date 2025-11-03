@@ -1,4 +1,4 @@
-package com.ai.api.lab.dto;
+package com.ai.api.board.lab.dto;
 
 import java.util.List;
 import lombok.AllArgsConstructor;

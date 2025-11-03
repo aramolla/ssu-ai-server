@@ -1,6 +1,6 @@
-package com.ai.api.professor.dto;
+package com.ai.api.board.professor.dto;
 
-import com.ai.api.professor.domain.Professor;
+import com.ai.api.board.domain.Professor;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

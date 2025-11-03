@@ -95,7 +95,7 @@ public class AttachmentService {
 
     public void deleteAttachment(Long attachmentId){
         Attachment existingAttachment = attachmentRepository.findById(attachmentId)
-            .orElseThrow(() -> new RuntimeException("파일을 찾을 숭 없음"));
+            .orElseThrow(() -> new RuntimeException("파일을 찾을 수 없음"));
 
         if(existingAttachment.getPostAttachment()!=null){
             existingAttachment.getPostAttachment().clear();
@@ -105,7 +105,7 @@ public class AttachmentService {
             Path AttachmentPath = Paths.get(existingAttachment.getFilePath());
             Files.deleteIfExists(AttachmentPath); // 물리적으로 파일 삭제, 파일이 존재 위에서 확인하여 예외던지지 않음
             attachmentRepository.delete(existingAttachment);
-            log.info("파일 삭제 로직 성곤");
+            log.info("파일 삭제 로직 성공");
 
         } catch (Exception e) {
             log.info("파일 삭제 로직 실패", e);

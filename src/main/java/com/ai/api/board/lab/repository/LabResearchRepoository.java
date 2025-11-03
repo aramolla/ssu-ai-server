@@ -1,6 +1,6 @@
-package com.ai.api.lab.repository;
+package com.ai.api.board.lab.repository;
 
-import com.ai.api.lab.domain.LabResearch;
+import com.ai.api.board.domain.LabResearch;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;

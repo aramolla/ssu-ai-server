@@ -1,16 +1,15 @@
-package com.ai.api.professor.controller;
+package com.ai.api.board.professor.controller;
 
-import com.ai.api.professor.domain.Professor;
-import com.ai.api.professor.dto.ProfessorReqDTO;
-import com.ai.api.professor.dto.ProfessorResDTO;
-import com.ai.api.professor.service.ProfessorService;
+import com.ai.api.board.domain.Professor;
+import com.ai.api.board.professor.dto.ProfessorReqDTO;
+import com.ai.api.board.professor.dto.ProfessorResDTO;
+import com.ai.api.board.professor.service.ProfessorService;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

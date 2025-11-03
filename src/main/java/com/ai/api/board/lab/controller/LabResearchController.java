@@ -1,9 +1,9 @@
-package com.ai.api.lab.controller;
+package com.ai.api.board.lab.controller;
 
-import com.ai.api.lab.domain.LabResearch;
-import com.ai.api.lab.dto.LabResearchReqDTO;
-import com.ai.api.lab.dto.LabResearchResDTO;
-import com.ai.api.lab.service.LabResearchService;
+import com.ai.api.board.lab.service.LabResearchService;
+import com.ai.api.board.domain.LabResearch;
+import com.ai.api.board.lab.dto.LabResearchReqDTO;
+import com.ai.api.board.lab.dto.LabResearchResDTO;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.stream.Collectors;

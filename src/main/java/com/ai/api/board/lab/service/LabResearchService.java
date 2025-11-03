@@ -1,8 +1,8 @@
-package com.ai.api.lab.service;
+package com.ai.api.board.lab.service;
 
-import com.ai.api.lab.domain.LabResearch;
-import com.ai.api.lab.dto.LabResearchReqDTO;
-import com.ai.api.lab.repository.LabResearchRepoository;
+import com.ai.api.board.domain.LabResearch;
+import com.ai.api.board.lab.dto.LabResearchReqDTO;
+import com.ai.api.board.lab.repository.LabResearchRepoository;
 import com.ai.api.resource.domain.Attachment;
 import com.ai.api.resource.service.AttachmentService;
 import org.springframework.data.domain.Pageable;
@@ -83,7 +83,6 @@ public class LabResearchService {
         }
 
         return updatedLabResearch;
-
     }
 
 

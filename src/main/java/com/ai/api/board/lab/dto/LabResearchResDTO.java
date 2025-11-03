@@ -1,6 +1,6 @@
-package com.ai.api.lab.dto;
+package com.ai.api.board.lab.dto;
 
-import com.ai.api.lab.domain.LabResearch;
+import com.ai.api.board.domain.LabResearch;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

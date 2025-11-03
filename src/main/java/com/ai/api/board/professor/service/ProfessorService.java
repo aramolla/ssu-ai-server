@@ -1,8 +1,8 @@
-package com.ai.api.professor.service;
+package com.ai.api.board.professor.service;
 
-import com.ai.api.professor.domain.Professor;
-import com.ai.api.professor.dto.ProfessorReqDTO;
-import com.ai.api.professor.repository.ProfessorRepository;
+import com.ai.api.board.domain.Professor;
+import com.ai.api.board.professor.dto.ProfessorReqDTO;
+import com.ai.api.board.professor.repository.ProfessorRepository;
 import com.ai.api.resource.domain.Attachment;
 import com.ai.api.resource.service.AttachmentService;
 import java.util.List;
