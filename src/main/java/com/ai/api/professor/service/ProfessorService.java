@@ -1,12 +1,10 @@
 package com.ai.api.professor.service;
 
 import com.ai.api.professor.domain.Professor;
-import com.ai.api.professor.domain.ProfessorHistory;
-import com.ai.api.professor.domain.ProfessorImage;
-import com.ai.api.professor.dto.HistoryDTO;
 import com.ai.api.professor.dto.ProfessorReqDTO;
 import com.ai.api.professor.repository.ProfessorRepository;
-import com.ai.api.resource.service.FileService;
+import com.ai.api.resource.domain.Attachment;
+import com.ai.api.resource.service.AttachmentService;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProfessorService {
 
     private final ProfessorRepository professorRepository;
-    private final FileService fileService;
+    private final AttachmentService attachmentService;
 
     public List<Professor> getAllProfessors(Pageable pageable) {
         List<Professor> professors = professorRepository.findAll(pageable).getContent();
@@ -35,25 +33,19 @@ public class ProfessorService {
 
     public Professor addProfessor(ProfessorReqDTO professorReq) {
         Professor professor = Professor.builder()
-            .professorName(professorReq.getProfessorName())
+            .title(professorReq.getProfessorName())
             .professorEmail(professorReq.getProfessorEmail())
-            .department(professorReq.getDepartment())
+            .content(professorReq.getDepartment())
             .major(professorReq.getMajor())
+            .historise(professorReq.getHistorise())
             .office(professorReq.getOffice())
             .tel(professorReq.getTel())
             .build();
 
-        if(professorReq.getHistorise() != null){
-            for (HistoryDTO historyDTO : professorReq.getHistorise()) {
-                ProfessorHistory history = historyDTO.toEntity();
-                professor.addHistory(history);
-            }
-        }
 
         if(professorReq.getImage() != null){
-            ProfessorImage saveImage = fileService.saveFile(professorReq.getImage());
+            Attachment saveImage = attachmentService.saveAttachment(professorReq.getImage());
             professor.setImage(saveImage);
-            saveImage.setProfessor(professor);
         }
 
         Professor savePro = professorRepository.save(professor);
@@ -67,23 +59,17 @@ public class ProfessorService {
         Professor existingProfessor = professorRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Professor not found"));
 
-        existingProfessor.setProfessorName(professorReq.getProfessorName());
+        existingProfessor.setTitle(professorReq.getProfessorName());
         existingProfessor.setProfessorEmail(professorReq.getProfessorEmail());
-        existingProfessor.setDepartment(professorReq.getDepartment());
+        existingProfessor.setContent(professorReq.getDepartment());
         existingProfessor.setMajor(professorReq.getMajor());
+        existingProfessor.setHistorise(professorReq.getHistorise());
         existingProfessor.setOffice(professorReq.getOffice());
         existingProfessor.setTel(professorReq.getTel());
 
-        existingProfessor.clearHistories();
-        if (professorReq.getHistorise() != null) {
-            for (HistoryDTO historyDTO : professorReq.getHistorise()) {
-                ProfessorHistory history = historyDTO.toEntity();
-                existingProfessor.addHistory(history);
-            }
-        }
 
         if(professorReq.getImage() != null){
-            existingProfessor.setImage(fileService.saveFile(professorReq.getImage()));
+            existingProfessor.setImage(attachmentService.saveAttachment(professorReq.getImage()));
             log.info("새 이미지로 덮어씌우기");
         }
 
@@ -95,10 +81,10 @@ public class ProfessorService {
             .orElseThrow(() -> new RuntimeException("Professor not found"));
 
         if(delProfessor.getImage() != null){
-            fileService.deleteImage(delProfessor.getImage().getId());
+            attachmentService.deleteAttachment(delProfessor.getImage().getId());
         }
         professorRepository.deleteById(id);
-        log.info("교수 정보 삭제 완료: {}", delProfessor.getProfessorName());
+        log.info("교수 정보 삭제 완료: {}", delProfessor.getTitle());
     }
 
 

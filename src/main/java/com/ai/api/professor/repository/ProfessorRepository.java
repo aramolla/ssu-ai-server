@@ -16,9 +16,7 @@ public interface ProfessorRepository extends JpaRepository<Professor, Long> {
     Optional<Professor> findById(Long Id);
 
     @Query("SELECT p FROM Professor p WHERE " +
-        "p.professorName LIKE %:keyword% OR " +
         "p.professorEmail LIKE %:keyword% OR " +
-        "p.department LIKE %:keyword% OR " +
         "p.major LIKE %:keyword% OR " +
         "p.office LIKE %:keyword% OR " +
         "p.tel LIKE %:keyword%")

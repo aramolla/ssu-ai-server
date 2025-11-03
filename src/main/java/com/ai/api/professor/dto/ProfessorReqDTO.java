@@ -23,9 +23,8 @@ public class ProfessorReqDTO {
     private String department;
     @NotBlank(message = "연구분야를 입력해주세요")
     private String major;
+    private String historise;
 
-    @Valid
-    private List<HistoryDTO> historise = new ArrayList<>();
 
     private MultipartFile image;
 

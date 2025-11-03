@@ -1,7 +1,6 @@
 package com.ai.api.resource.service;
 
 import com.ai.api.board.domain.Post;
-import com.ai.api.professor.domain.ProfessorImage;
 import com.ai.api.resource.domain.Attachment;
 import com.ai.api.resource.domain.PostAttachment;
 import com.ai.api.resource.repository.AttachmentRepository;

@@ -2,9 +2,6 @@ package com.ai.api.professor.dto;
 
 import com.ai.api.professor.domain.Professor;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,36 +21,31 @@ public class ProfessorResDTO {
     private String tel;
     private String image;
 
-    private List<HistoryDTO> historise = new ArrayList<>();
+    private String historise;
+
 
     private LocalDateTime createdAt;
 
     public static ProfessorResDTO from(Professor professor) {
 
-        List<HistoryDTO> historise = new ArrayList<>();
-        if (professor.getHistorise()!=null){
-            historise = professor.getHistorise().stream()
-                .map(HistoryDTO::from)
-                .collect(Collectors.toList());
-        }
 
         String existImage = null;
         if (professor.getImage()!=null){
-            existImage = professor.getImage().getImagePath();
+            existImage = professor.getImage().getFilePath();
         }
 
 
         return ProfessorResDTO.builder()
             .id(professor.getId())
-            .professorName(professor.getProfessorName())
+            .professorName(professor.getTitle())
             .professorEmail(professor.getProfessorEmail())
-            .department(professor.getDepartment())
+            .department(professor.getContent())
             .major(professor.getMajor())
             .office(professor.getOffice())
             .tel(professor.getTel())
             .image(existImage)
-            .historise(historise)
-            .createdAt(professor.getCreateTime())
+            .historise(professor.getHistorise())
+            .createdAt(professor.getCreatedAt())
             .build();
     }
 

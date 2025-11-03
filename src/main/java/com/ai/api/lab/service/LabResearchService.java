@@ -5,7 +5,6 @@ import com.ai.api.lab.dto.LabResearchReqDTO;
 import com.ai.api.lab.repository.LabResearchRepoository;
 import com.ai.api.resource.domain.Attachment;
 import com.ai.api.resource.service.AttachmentService;
-import com.ai.api.resource.service.FileService;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class LabResearchService {
 
     private final LabResearchRepoository labResearchRepoository;
-    private final FileService fileService;
     private final AttachmentService attachmentService;
 
     @Transactional(readOnly = true)
