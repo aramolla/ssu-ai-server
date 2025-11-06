@@ -4,6 +4,7 @@ import com.ai.api.board.domain.LabResearch;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -17,6 +18,10 @@ public interface LabResearchRepoository extends JpaRepository<LabResearch, Long>
     Page<LabResearch> findAllOrderByNoticeAndCreatedAt(Pageable pageable);
 
     Page<LabResearch> searchByTitle(@Param("keyword") String title, Pageable pageable);
+
+    @Modifying
+    @Query("UPDATE LabResearch l SET l.view_count = COALESCE(l.view_count, 0) + 1 WHERE l.id = :id")
+    void incrementViewCount(@Param("id") Long id);
 
 
 }

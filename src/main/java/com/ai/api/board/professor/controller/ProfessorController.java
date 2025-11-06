@@ -1,6 +1,8 @@
 package com.ai.api.board.professor.controller;
 
+import com.ai.api.board.domain.LabResearch;
 import com.ai.api.board.domain.Professor;
+import com.ai.api.board.lab.dto.LabResearchResDTO;
 import com.ai.api.board.professor.dto.ProfessorReqDTO;
 import com.ai.api.board.professor.dto.ProfessorResDTO;
 import com.ai.api.board.professor.service.ProfessorService;
@@ -42,13 +44,23 @@ public class ProfessorController {
         return ResponseEntity.ok(professor);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ProfessorResDTO> getDetailProfessor(
+        @PathVariable Long id
+    ){
+        log.info("교수 소개 게시글 {} 상세 조회", id);
+        Professor detailProfessor = professorService.getDetailProfessor(id);
+        return ResponseEntity.ok(ProfessorResDTO.from(detailProfessor));
+    }
+
+
     @GetMapping("/search")
     public ResponseEntity<List<ProfessorResDTO>> searchProfessor(
         @RequestParam(value = "keyword") String keyword,
         @PageableDefault(sort = "id", size = 9) Pageable pageable
     ){
         log.info("키워드 검색");
-        List<ProfessorResDTO> professorKeyword = professorService.searchProfessor(keyword, pageable)
+        List<ProfessorResDTO> professorKeyword = professorService.searchProfessors(keyword, pageable)
             .stream()
             .map(ProfessorResDTO::from)
             .collect(Collectors.toList());
@@ -66,7 +78,7 @@ public class ProfessorController {
         log.info("교수 정보 등록");
 
         professorReq.setImage(image);
-        Professor professor = professorService.addProfessor(professorReq);
+        Professor professor = professorService.saveProfessor(professorReq);
         return ResponseEntity.ok(ProfessorResDTO.from(professor));
     }
 
@@ -86,7 +98,7 @@ public class ProfessorController {
     public ResponseEntity<?> deleteProfessor(@PathVariable("id") Long id){
         log.info("교수 정보 삭제");
         professorService.deleteProfessor(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 

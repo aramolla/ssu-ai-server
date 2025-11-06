@@ -1,5 +1,6 @@
 package com.ai.api.board.professor.service;
 
+import com.ai.api.board.domain.LabResearch;
 import com.ai.api.board.domain.Professor;
 import com.ai.api.board.professor.dto.ProfessorReqDTO;
 import com.ai.api.board.professor.repository.ProfessorRepository;
@@ -26,12 +27,19 @@ public class ProfessorService {
         return professors;
     }
 
-    public List<Professor> searchProfessor(String keyword, Pageable pageable) {
+    public Professor getDetailProfessor(Long id) {
+        professorRepository.incrementViewCount(id); // 중복 조회 여부 무시
+
+        return professorRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid Professor"));
+    }
+
+    public List<Professor> searchProfessors(String keyword, Pageable pageable) {
         List<Professor> searchProfessor = professorRepository.searchByKeyword(keyword, pageable).getContent();
         return searchProfessor;
     }
 
-    public Professor addProfessor(ProfessorReqDTO professorReq) {
+    public Professor saveProfessor(ProfessorReqDTO professorReq) {
         Professor professor = Professor.builder()
             .title(professorReq.getProfessorName())
             .professorEmail(professorReq.getProfessorEmail())
@@ -43,7 +51,7 @@ public class ProfessorService {
             .build();
 
 
-        if(professorReq.getImage() != null){
+        if(professorReq.getImage() != null && !professorReq.getImage().isEmpty()){
             Attachment saveImage = attachmentService.saveAttachment(professorReq.getImage());
             professor.setImage(saveImage);
         }
@@ -57,7 +65,7 @@ public class ProfessorService {
 
     public Professor updateProfessor(Long id, ProfessorReqDTO professorReq) {
         Professor existingProfessor = professorRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Professor not found"));
+            .orElseThrow(() -> new IllegalArgumentException("Professor not found"));
 
         existingProfessor.setTitle(professorReq.getProfessorName());
         existingProfessor.setProfessorEmail(professorReq.getProfessorEmail());
@@ -68,7 +76,7 @@ public class ProfessorService {
         existingProfessor.setTel(professorReq.getTel());
 
 
-        if(professorReq.getImage() != null){
+        if(professorReq.getImage() != null && !professorReq.getImage().isEmpty()){
             existingProfessor.setImage(attachmentService.saveAttachment(professorReq.getImage()));
             log.info("새 이미지로 덮어씌우기");
         }

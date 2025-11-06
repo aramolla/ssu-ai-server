@@ -20,8 +20,8 @@ public class ProfessorResDTO {
     private String office;
     private String tel;
     private String image;
-
     private String historise;
+    private Integer viewCount;
 
 
     private LocalDateTime createdAt;
@@ -45,6 +45,7 @@ public class ProfessorResDTO {
             .tel(professor.getTel())
             .image(existImage)
             .historise(professor.getHistorise())
+            .viewCount(professor.getView_count())
             .createdAt(professor.getCreatedAt())
             .build();
     }

@@ -27,8 +27,8 @@ public class LabResearchResDTO {
             .isNotice(labResearch.isNotice())
             .createdAt(labResearch.getCreatedAt())
             .labSiteUrl(labResearch.getLabSiteUrl())
-            .thumbnailUrl(labResearch.getThumbnail().getFilePath())
-            .viewCount(0)
+            .thumbnailUrl(labResearch.getThumbnail() != null ? labResearch.getThumbnail().getFilePath() : null)
+            .viewCount(labResearch.getView_count())
             .build();
     }
 

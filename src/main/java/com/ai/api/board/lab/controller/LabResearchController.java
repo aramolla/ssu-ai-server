@@ -1,9 +1,11 @@
 package com.ai.api.board.lab.controller;
 
+import com.ai.api.board.domain.Notice;
 import com.ai.api.board.lab.service.LabResearchService;
 import com.ai.api.board.domain.LabResearch;
 import com.ai.api.board.lab.dto.LabResearchReqDTO;
 import com.ai.api.board.lab.dto.LabResearchResDTO;
+import com.ai.api.board.notice.dto.NoticeResDTO;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +30,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/lab-research")
 public class LabResearchController {
 
-    // TODO: view_count
     private final LabResearchService labResearchService;
 
     @GetMapping
@@ -44,6 +45,16 @@ public class LabResearchController {
         return ResponseEntity.ok(LabResearchList);
 
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<LabResearchResDTO> getDetailLabResearch(
+        @PathVariable Long id
+    ){
+        log.info("연구활동 게시글 {} 상세 조회", id);
+        LabResearch detailLabResearch = labResearchService.getDetailLabResearch(id);
+        return ResponseEntity.ok(LabResearchResDTO.from(detailLabResearch));
+    }
+
 
     @GetMapping("/search")
     public ResponseEntity<List<LabResearchResDTO>> searchLabResearch(
@@ -91,8 +102,8 @@ public class LabResearchController {
         @PathVariable("id") Long id
     ){
         log.info("연구 활동 삭제");
-        LabResearch deleteLabResearch = labResearchService.deleteLabResearch(id);
-        return ResponseEntity.ok(LabResearchResDTO.from(deleteLabResearch));
+        labResearchService.deleteLabResearch(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

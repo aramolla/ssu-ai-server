@@ -28,6 +28,7 @@ public class AttachmentService {
     @Value("${file.Lab-research-upload-dir}")
     private String uploadDir;
 
+    // 파일 조회
     public Attachment getAttachment(Long attachmentId){
         return attachmentRepository.findById(attachmentId)
             .orElseThrow(()->new RuntimeException("이미지를 찾을 수 없음"));
@@ -62,8 +63,22 @@ public class AttachmentService {
         }
     }
 
+    // 썸네일 여부 정보 Post와 연결
+    public void saveThumbnailAttachment(Attachment thumbnail, Post post) {
+        PostAttachment postAttachment = new PostAttachment();
+        if (thumbnail == null || post == null) {
+            postAttachment.setThumbnail(false);
+        }
+
+        postAttachment.setThumbnail(true);
+
+        postAttachmentRepository.save(postAttachment);
+
+        log.info("게시글({})에 썸네일({}) 연결 완료", post.getId(), thumbnail.getOriginalFileName());
+    }
+
     // 파일 리스트 저장 및 Post와 연결
-    public void savePostAttachments(List<MultipartFile> files, Post post) {
+    public void savePostAttachments(MultipartFile thumbnail, List<MultipartFile> files, Post post) {
         if (files == null || files.isEmpty()) {
             return;
         }
@@ -77,8 +92,10 @@ public class AttachmentService {
                     PostAttachment postAttachment = PostAttachment.builder()
                         .post(post)
                         .attachment(attachment)
-                        .isThumbnail(false)
                         .build();
+                    if(thumbnail != null && !thumbnail.isEmpty()){
+                        postAttachment.setThumbnail(true);
+                    }
 
                     postAttachmentRepository.save(postAttachment);
 
@@ -86,12 +103,11 @@ public class AttachmentService {
 
                 } catch (Exception e) {
                     log.error("첨부파일 저장 실패: {}", file.getOriginalFilename(), e);
-                    // 하나의 파일 실패가 전체를 망가뜨리지 않도록 계속 진행
-                    // 필요시 예외를 throw하여 전체 트랜잭션 롤백 가능
                 }
             }
         }
     }
+
 
     public void deleteAttachment(Long attachmentId){
         Attachment existingAttachment = attachmentRepository.findById(attachmentId)
@@ -132,6 +148,7 @@ public class AttachmentService {
             }
         }
     }
+
 
     private String generateStoredFileName(String originalFileName) {
         String uuid = UUID.randomUUID().toString();

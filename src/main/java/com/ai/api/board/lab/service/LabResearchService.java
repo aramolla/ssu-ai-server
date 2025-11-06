@@ -1,6 +1,7 @@
 package com.ai.api.board.lab.service;
 
 import com.ai.api.board.domain.LabResearch;
+import com.ai.api.board.domain.Notice;
 import com.ai.api.board.lab.dto.LabResearchReqDTO;
 import com.ai.api.board.lab.repository.LabResearchRepoository;
 import com.ai.api.resource.domain.Attachment;
@@ -21,13 +22,18 @@ public class LabResearchService {
     private final LabResearchRepoository labResearchRepoository;
     private final AttachmentService attachmentService;
 
-    @Transactional(readOnly = true)
     public List<LabResearch> getAllResearch(Pageable pageable) {
         List<LabResearch> LabResearchList = labResearchRepoository.findAll(pageable).getContent();
         return LabResearchList;
     }
 
-    @Transactional(readOnly = true)
+    public LabResearch getDetailLabResearch(Long id) {
+        labResearchRepoository.incrementViewCount(id); // 중복 조회 여부 무시
+
+        return labResearchRepoository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid LabResearch"));
+    }
+
     public List<LabResearch> searchLabResearch(String keyword, Pageable pageable) {
         List<LabResearch> searchList = labResearchRepoository.searchByTitle(keyword, pageable).getContent();
         return searchList;
@@ -42,7 +48,7 @@ public class LabResearchService {
             .labSiteUrl(labResearchReqDTO.getLabSiteUrl())
             .build();
 
-        if(labResearchReqDTO.getThumbnail() != null){
+        if(labResearchReqDTO.getThumbnail() != null && !labResearchReqDTO.getThumbnail().isEmpty()){
             Attachment thumbnail = attachmentService.saveAttachment(labResearchReqDTO.getThumbnail());
             labResearch.setThumbnail(thumbnail);
         }
@@ -50,7 +56,7 @@ public class LabResearchService {
         LabResearch savedLabResearch = labResearchRepoository.save(labResearch);
 
         if(labResearchReqDTO.getAttachments()!=null){
-            attachmentService.savePostAttachments(labResearchReqDTO.getAttachments(), savedLabResearch);
+            attachmentService.savePostAttachments(labResearchReqDTO.getThumbnail(), labResearchReqDTO.getAttachments(), savedLabResearch);
         }
 
         log.info("연구활동 게시글 생성 완료: {}", savedLabResearch.getId());
@@ -60,14 +66,14 @@ public class LabResearchService {
 
     public LabResearch updateLabResearch(Long id, LabResearchReqDTO labResearchReqDTO) {
         LabResearch labResearch = labResearchRepoository.findById(id)
-            .orElseThrow(() -> new RuntimeException("LabResearch not found"));
+            .orElseThrow(() -> new IllegalArgumentException("LabResearch not found"));
 
         labResearch.setTitle(labResearchReqDTO.getTitle());
         labResearch.setContent(labResearchReqDTO.getContent());
         labResearch.setNotice(labResearchReqDTO.isNotice());
         labResearch.setLabSiteUrl(labResearchReqDTO.getLabSiteUrl());
 
-        if(labResearchReqDTO.getThumbnail() != null){
+        if(labResearchReqDTO.getThumbnail() != null && !labResearchReqDTO.getThumbnail().isEmpty()){
             if(labResearch.getThumbnail() != null){
                 attachmentService.deleteAttachment(labResearch.getThumbnail().getId());
             }
@@ -79,14 +85,14 @@ public class LabResearchService {
 
         if(labResearchReqDTO.getAttachments()!=null){
             attachmentService.deletePostAttachments(labResearch);
-            attachmentService.savePostAttachments(labResearchReqDTO.getAttachments(), updatedLabResearch);
+            attachmentService.savePostAttachments(labResearchReqDTO.getThumbnail(), labResearchReqDTO.getAttachments(), updatedLabResearch);
         }
 
         return updatedLabResearch;
     }
 
 
-    public LabResearch deleteLabResearch(Long id) {
+    public void deleteLabResearch(Long id) {
         LabResearch labResearch = labResearchRepoository.findById(id)
             .orElseThrow(() -> new RuntimeException("LabResearch not found"));
 
@@ -98,8 +104,6 @@ public class LabResearchService {
         }
 
        labResearchRepoository.deleteById(id);
-
-        return labResearch;
     }
 
 
