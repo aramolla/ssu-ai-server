@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 @Slf4j
+@Transactional
 @RequiredArgsConstructor
 public class ProfessorService {
 
@@ -48,6 +48,7 @@ public class ProfessorService {
             .historise(professorReq.getHistorise())
             .office(professorReq.getOffice())
             .tel(professorReq.getTel())
+            .view_count(0)
             .build();
 
 

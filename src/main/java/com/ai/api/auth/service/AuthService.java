@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class AuthService {
 
     private final UserRepository userRepository;
@@ -28,7 +28,6 @@ public class AuthService {
     private final JwtUtil jwtUtil;
 
     // 회원가입
-    @Transactional
     public UserInfoDTO signUp(SignUpDTO request) {
         // 아이디 중복 체크
         if (userRepository.existsByUsername(request.getUsername())) {
@@ -53,7 +52,6 @@ public class AuthService {
     }
 
     // 로그인
-    @Transactional
     public TokenInfoDTO login(LoginDTO request) {
         // 사용자 조회
         User user = userRepository.findByUsername(request.getUsername())
@@ -90,7 +88,6 @@ public class AuthService {
     }
 
     // Access Token 재발급
-    @Transactional
     public TokenInfoDTO refreshAccessToken(RefreshTokenDTO request) {
         // Refresh Token 유효성 검증
         if (!jwtUtil.validateToken(request.getRefreshToken())) {
@@ -121,7 +118,6 @@ public class AuthService {
     }
 
     // 로그아웃
-    @Transactional
     public void logout(String username) {
         User user = userRepository.findByUsername(username)
             .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));

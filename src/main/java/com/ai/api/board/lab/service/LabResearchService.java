@@ -1,7 +1,6 @@
 package com.ai.api.board.lab.service;
 
 import com.ai.api.board.domain.LabResearch;
-import com.ai.api.board.domain.Notice;
 import com.ai.api.board.lab.dto.LabResearchReqDTO;
 import com.ai.api.board.lab.repository.LabResearchRepoository;
 import com.ai.api.resource.domain.Attachment;
@@ -46,6 +45,7 @@ public class LabResearchService {
             .content(labResearchReqDTO.getContent())
             .isNotice(labResearchReqDTO.isNotice())
             .labSiteUrl(labResearchReqDTO.getLabSiteUrl())
+            .view_count(0)
             .build();
 
         if(labResearchReqDTO.getThumbnail() != null && !labResearchReqDTO.getThumbnail().isEmpty()){

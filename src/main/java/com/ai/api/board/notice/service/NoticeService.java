@@ -44,6 +44,7 @@ public class NoticeService {
             .content(noticeReq.getContent())
             .category(noticeReq.getCategory())
             .isNotice(noticeReq.isNotice())
+            .view_count(0)
             .build();
 
         Notice saveNotice = noticeRepository.save(notice);

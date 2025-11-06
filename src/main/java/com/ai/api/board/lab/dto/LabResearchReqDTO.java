@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor @AllArgsConstructor //TODO
 public class LabResearchReqDTO {
     private String title;
     private String content;

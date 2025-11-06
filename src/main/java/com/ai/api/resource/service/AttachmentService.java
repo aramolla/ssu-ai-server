@@ -9,16 +9,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class AttachmentService {
 
@@ -34,7 +37,7 @@ public class AttachmentService {
             .orElseThrow(()->new RuntimeException("이미지를 찾을 수 없음"));
     }
 
-    // 파일 단일 저장
+    // 파일 단일 저장( 썸네일 저장 )
     public Attachment saveAttachment(MultipartFile file) {
         Path path = Paths.get(uploadDir);
         try{
@@ -83,6 +86,10 @@ public class AttachmentService {
             return;
         }
 
+        if (post.getPostAttachments() == null) {
+            post.setPostAttachments(new ArrayList<>());
+        }
+
         for (MultipartFile file : files) {
             if (!file.isEmpty()) {
                 try {
@@ -92,12 +99,12 @@ public class AttachmentService {
                     PostAttachment postAttachment = PostAttachment.builder()
                         .post(post)
                         .attachment(attachment)
+                        .isThumbnail(thumbnail != null && !thumbnail.isEmpty())
                         .build();
-                    if(thumbnail != null && !thumbnail.isEmpty()){
-                        postAttachment.setThumbnail(true);
-                    }
 
                     postAttachmentRepository.save(postAttachment);
+
+                    post.getPostAttachments().add(postAttachment); // 양방향 관계 직접 설정
 
                     log.info("게시글({})에 첨부파일({}) 연결 완료", post.getId(), attachment.getOriginalFileName());
 
