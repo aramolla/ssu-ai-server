@@ -95,7 +95,7 @@ public class ResearchController {
     public ResponseEntity<ResearchResDTO> deleteResearch(
         @PathVariable Long id
     ){
-        log.info("자료실 게시글 삭제: {}", id);
+        log.info("연구성과 게시글 삭제: {}", id);
         researchService.deleteResearch(id);
 
         return ResponseEntity.noContent().build();
