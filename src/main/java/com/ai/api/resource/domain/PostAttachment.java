@@ -1,6 +1,6 @@
 package com.ai.api.resource.domain;
 
-import com.ai.api.board.domain.Post;
+import com.ai.api.post.domain.Post;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
