@@ -1,6 +1,5 @@
 package com.ai.common.util;
 
-import com.ai.auth.domain.AdminRole;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import java.util.Arrays;
