@@ -1,6 +1,7 @@
 package com.ai.api.post.service;
 
 import com.ai.api.board.domain.Board;
+import com.ai.api.board.domain.BoardType;
 import com.ai.api.post.domain.Post;
 import com.ai.api.post.dto.PostReqDTO;
 import com.ai.api.board.repository.BoardRepository;
@@ -25,6 +26,9 @@ public class PostService {
     private final BoardRepository boardRepository;
     private final AttachmentService attachmentService;
 
+    // BoardType 수정은 Post가 아닌 Board에서 진행됨
+    // post에서는 모든 값을 저장하고 BoardType 따른 처리는 프론트에서 표시해줄 반환값에서 수행
+
     public Post createPost(PostReqDTO reqDTO) {
         Board board = boardRepository.findById(reqDTO.getBoardId())
             .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + reqDTO.getBoardId()));
@@ -35,18 +39,17 @@ public class PostService {
             .title(reqDTO.getTitle())
             .content(reqDTO.getContent())
             .isNotice(reqDTO.isNotice())
-            .view_count(0)
-            .category(reqDTO.getCategory());
-
-        mapDynamicFields(board, reqDTO.getDynamicFields(), builder);
+            .category(reqDTO.getCategory())
+            .startedAt(reqDTO.getStartedAt())
+            .endedAt(reqDTO.getEndedAt())
+            .view_count(0);
 
         if (reqDTO.getThumbnail() != null) {
             Attachment saveImage = attachmentService.saveAttachment(reqDTO.getThumbnail());
             builder.thumbnail(saveImage);
         }
-        if(reqDTO.getCategory()!= null && !reqDTO.getCategory().isEmpty()) {
-            builder.category(reqDTO.getCategory());
-        }
+
+        mapDynamicFields(board, reqDTO.getDynamicFields(), builder);
 
         Post post = builder.build();
         post = postRepository.save(post);
@@ -54,6 +57,7 @@ public class PostService {
         if(reqDTO.getAttachments() != null) {
             attachmentService.savePostAttachments(reqDTO.getThumbnail(), reqDTO.getAttachments(), post);
         }
+
         log.info("게시글 생성 (게시판: {}, 제목: {})", board.getTitle(), reqDTO.getTitle());
         return postRepository.save(post);
     }
@@ -112,12 +116,13 @@ public class PostService {
             .orElseThrow(() -> new IllegalArgumentException("Post not found with ID: " + id));
         Board board = post.getBoard();
 
+        // 필드 업데이트
         post.setTitle(reqDTO.getTitle());
         post.setContent(reqDTO.getContent());
         post.setNotice(reqDTO.isNotice());
         post.setCategory(reqDTO.getCategory());
-
-        // Board의 subLabel이 설정된 경우에만 값 업데이트
+        post.setStartedAt(reqDTO.getStartedAt());
+        post.setEndedAt(reqDTO.getEndedAt());
         if (reqDTO.getDynamicFields() != null) {
             if (board.getSub1Label() != null && reqDTO.getDynamicFields().containsKey(board.getSub1Label())) {
                 post.setSub1Value(reqDTO.getDynamicFields().get(board.getSub1Label()));

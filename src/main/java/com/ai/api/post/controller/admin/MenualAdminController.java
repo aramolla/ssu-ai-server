@@ -1,4 +1,4 @@
-package com.ai.api.post.controller;
+package com.ai.api.post.controller.admin;
 
 import com.ai.api.board.domain.BoardCategory;
 import com.ai.api.post.service.PostService;
@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/menual")
-public class MenualControllerBase extends BasePostController {
+@RequestMapping("/admin/menual")
+public class MenualAdminController extends BasePostAdminController {
 
-    public MenualControllerBase(PostService postService) {
+    public MenualAdminController(PostService postService) {
         super(postService);
     }
 

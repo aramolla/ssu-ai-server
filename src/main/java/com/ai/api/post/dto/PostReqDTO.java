@@ -1,6 +1,6 @@
 package com.ai.api.post.dto;
 
-import com.ai.api.resource.domain.PostAttachment;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +25,12 @@ public class PostReqDTO {
 
     private String category;
 
+    // thumbnail
     private MultipartFile thumbnail;
+    // calender
+    private LocalDate startedAt;
+    private LocalDate endedAt;
+
     private List<MultipartFile> attachments;
 
 }

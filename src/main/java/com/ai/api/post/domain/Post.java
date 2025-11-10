@@ -17,6 +17,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -72,6 +73,13 @@ public class Post {
     @Column(length = 255)
     private String sub5Value;
 
+    //calender
+    @Column(name = "started_at")
+    private LocalDate startedAt;
+    @Column(name = "ended_at")
+    private LocalDate endedAt;
+
+    // thumbnail
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "thumbnail_id")
     private Attachment thumbnail;

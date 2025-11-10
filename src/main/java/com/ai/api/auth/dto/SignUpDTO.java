@@ -23,6 +23,6 @@ public class SignUpDTO {
     private String name;
 
     @Builder.Default
-    private AdminRole role = AdminRole.ROLE_USER;
+    private AdminRole role = AdminRole.ROLE_ADMIN;
 
 }

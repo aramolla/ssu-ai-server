@@ -6,15 +6,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/faq")
-public class FaqControllerBase extends BasePostController {
+@RequestMapping("/precautions")
+public class PrecautionController extends BasePostController {
 
-    public FaqControllerBase(PostService postService) {
+    public PrecautionController(PostService postService) {
         super(postService);
     }
 
     @Override
     protected BoardCategory getBoardCategory() {
-        return BoardCategory.FAQ;
+        return BoardCategory.PRECAUTIONS;
     }
 }

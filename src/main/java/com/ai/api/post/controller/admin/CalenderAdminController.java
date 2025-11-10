@@ -1,4 +1,4 @@
-package com.ai.api.post.controller;
+package com.ai.api.post.controller.admin;
 
 import com.ai.api.board.domain.BoardCategory;
 import com.ai.api.post.service.PostService;
@@ -6,15 +6,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/recruitment")
-public class RecruitmentControllerBase extends BasePostController {
+@RequestMapping("/admin/calendar")
+public class CalenderAdminController extends BasePostAdminController {
 
-    public RecruitmentControllerBase(PostService postService) {
-        super(postService);
+    public CalenderAdminController(PostService postService) { super(postService);
     }
 
     @Override
     protected BoardCategory getBoardCategory() {
-        return BoardCategory.RECRUITMENT;
+        return BoardCategory.CALENDER;
     }
 }

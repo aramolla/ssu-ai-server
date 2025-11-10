@@ -2,7 +2,6 @@ package com.ai.api.post.controller;
 
 import com.ai.api.board.domain.BoardCategory;
 import com.ai.api.post.domain.Post;
-import com.ai.api.post.dto.PostReqDTO;
 import com.ai.api.post.dto.PostResDTO;
 import com.ai.api.post.service.PostService;
 import java.util.List;
@@ -13,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -46,41 +44,4 @@ public abstract class BasePostController {
         return ResponseEntity.ok(PostResDTO.from(post));
     }
 
-
-    @PostMapping
-    public ResponseEntity<PostResDTO> createPost(
-        @RequestPart("reqDTO") PostReqDTO reqDTO,
-        @RequestPart(value = "thumbNail", required = false) MultipartFile image,
-        @RequestPart(value = "attachments", required = false) List<MultipartFile> attachments
-    ) {
-        log.info("{} 게시글 저장", getBoardCategory().getTitle());
-        reqDTO.setBoardId(getBoardCategory().getId());
-        reqDTO.setThumbnail(image);
-        reqDTO.setAttachments(attachments);
-        Post savedPost = postService.createPost(reqDTO);
-
-        return ResponseEntity.ok(PostResDTO.from(savedPost));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<PostResDTO> updatePost(
-        @PathVariable Long id,
-        @RequestPart("reqDTO") PostReqDTO reqDTO,
-        @RequestPart(value = "thumbNail", required = false) MultipartFile image,
-        @RequestPart(value = "attachments", required = false) List<MultipartFile> attachments
-    ) {
-        log.info("{} 게시글 업데이트", getBoardCategory().getTitle());
-        reqDTO.setBoardId(getBoardCategory().getId());
-        reqDTO.setThumbnail(image);
-        reqDTO.setAttachments(attachments);
-        Post updatedPost = postService.updatePost(id, reqDTO);
-        return ResponseEntity.ok(PostResDTO.from(updatedPost));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePost(@PathVariable Long id) {
-        log.info("{} 게시글 삭제", getBoardCategory().getTitle());
-        postService.deletePost(id);
-        return ResponseEntity.noContent().build();
-    }
 }

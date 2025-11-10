@@ -1,4 +1,4 @@
-package com.ai.api.post.controller;
+package com.ai.api.post.controller.admin;
 
 import com.ai.api.board.domain.BoardCategory;
 import com.ai.api.post.service.PostService;
@@ -6,15 +6,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/budget")
-public class BudgetControllerBase extends BasePostController {
+@RequestMapping("/admin/budget")
+public class BudgetAdminController extends BasePostAdminController {
 
-    public BudgetControllerBase(PostService postService) {
+    public BudgetAdminController(PostService postService) {
         super(postService);
     }
 
     @Override
     protected BoardCategory getBoardCategory() {
-        return BoardCategory.BUDGET;
+        return BoardCategory.NOTICE;
     }
 }

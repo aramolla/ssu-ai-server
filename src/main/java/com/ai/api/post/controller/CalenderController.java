@@ -6,15 +6,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/donation")
-public class DonationControllerBase extends BasePostController {
+@RequestMapping("/calendar")
+public class CalenderController extends BasePostController {
 
-    public DonationControllerBase(PostService postService) {
-        super(postService);
+    public CalenderController(PostService postService) { super(postService);
     }
 
     @Override
     protected BoardCategory getBoardCategory() {
-        return BoardCategory.DONATION;
+        return BoardCategory.CALENDER;
     }
 }

@@ -6,15 +6,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/research")
-public class ResearchControllerBase extends BasePostController {
+@RequestMapping("/donation")
+public class DonationController extends BasePostController {
 
-    public ResearchControllerBase(PostService postService) {
+    public DonationController(PostService postService) {
         super(postService);
     }
 
     @Override
     protected BoardCategory getBoardCategory() {
-        return BoardCategory.RESEARCH;
+        return BoardCategory.DONATION;
     }
 }

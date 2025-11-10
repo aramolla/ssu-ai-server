@@ -6,16 +6,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/data-room")
-public class DataRoomControllerBase extends BasePostController {
+@RequestMapping("/research")
+public class ResearchController extends BasePostController {
 
-    public DataRoomControllerBase(PostService postService) {
+    public ResearchController(PostService postService) {
         super(postService);
     }
 
     @Override
     protected BoardCategory getBoardCategory() {
-        return BoardCategory.DATAROOM;
+        return BoardCategory.RESEARCH;
     }
 }
-

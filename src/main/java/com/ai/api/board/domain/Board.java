@@ -38,6 +38,7 @@ public class Board {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private BoardType boardType; // LIST, THUMBNAIIL, FAQ, COMPANY
 

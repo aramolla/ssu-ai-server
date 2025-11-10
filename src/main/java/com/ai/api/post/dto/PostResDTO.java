@@ -1,12 +1,15 @@
 package com.ai.api.post.dto;
 
 import com.ai.api.board.domain.Board;
+import com.ai.api.board.domain.BoardType;
 import com.ai.api.post.domain.Post;
 import com.ai.api.resource.domain.Attachment;
 import com.ai.api.resource.dto.AttachmentDTO;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +22,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PostResDTO {
     private Long boardId;
+    private String boardTitle;
+    private BoardType boardType;
     // Posts 공통 필드
     private Long id;
     private String title;
@@ -34,9 +39,12 @@ public class PostResDTO {
     private DynamicField sub4;
     private DynamicField sub5;
 
-    private String thumbnailUrl;
     private List<AttachmentDTO> attachments;
-
+    // thumbnail
+    private String thumbnailUrl;
+    // calendar
+    private LocalDate startedAt;
+    private LocalDate endedAt;
     // 카테고리
     private String category;
     private String[] availableCategories;  // Board에 설정된 카테고리 목록
@@ -53,21 +61,23 @@ public class PostResDTO {
 
     public static PostResDTO from(Post post) {
         Board board = post.getBoard();
-        List<AttachmentDTO> attachmentDTOS = new ArrayList<>();
-        if(post.getPostAttachments()!=null){
-            attachmentDTOS = post.getPostAttachments()
-                .stream()
-                .map(pa -> AttachmentDTO.from(pa.getAttachment()))// , pa.isThumbnail()))
-                .collect(Collectors.toList());
-        }
-        Attachment thumbnail = new Attachment();
-        if(post.getThumbnail()!=null){
-            thumbnail = post.getThumbnail();
-        }
+
+        List<AttachmentDTO> attachmentDTOS = Optional.ofNullable(post.getPostAttachments())
+            .orElseGet(ArrayList::new) // null일 경우 빈 리스트 반환
+            .stream()
+            .map(pa -> AttachmentDTO.from(pa.getAttachment()))
+            .collect(Collectors.toList());
+
+        String thumbnailUrl = Optional.ofNullable(post.getThumbnail())
+            .map(Attachment::getFilePath)
+            .orElse(null);
+
 
         return PostResDTO.builder()
             .id(post.getId())
             .boardId(board.getId())
+            .boardTitle(board.getTitle())
+            .boardType(post.getBoard().getBoardType())
             .title(post.getTitle())
             .content(post.getContent())
             .isNotice(post.isNotice())
@@ -80,7 +90,9 @@ public class PostResDTO {
             .sub5(buildDynamicField(board.getSub5Label(), post.getSub5Value()))
             .attachments(attachmentDTOS)
             .category(post.getCategory())
-            .thumbnailUrl(thumbnail.getFilePath())
+            .thumbnailUrl(thumbnailUrl)
+            .startedAt(post.getStartedAt())
+            .endedAt(post.getEndedAt())
             .availableCategories(parseCategories(board.getCategories()))
             .build();
     }

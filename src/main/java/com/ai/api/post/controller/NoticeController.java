@@ -6,15 +6,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/etc")
-public class EtcControllerBase extends BasePostController {
+@RequestMapping("/notice")
+public class NoticeController extends BasePostController {
 
-    public EtcControllerBase(PostService postService) {
+    public NoticeController(PostService postService) {
         super(postService);
     }
 
     @Override
     protected BoardCategory getBoardCategory() {
-        return BoardCategory.ETC;
+        return BoardCategory.NOTICE;
     }
 }
