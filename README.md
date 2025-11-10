@@ -2,103 +2,84 @@
 
 ### 주요 특징
 
-- **동적 게시판 시스템**: 메타데이터 기반으로 다양한 타입(LIST, THUMBNAIL, FAQ, COMPANY)의 게시판 동적 생성
-- **파일 관리**: 첨부파일 및 썸네일 이미지 업로드/다운로드
-- **인증/인가**: JWT 기반 Spring Security 인증
-- **동적 필드**: 게시판별 최대 5개의 커스텀 필드(sub1~sub5) 지원
+- 동적 게시판 시스템 메타데이터 기반으로 다양한 타입(LIST, THUMBNAIL, FAQ, COMPANY)의 게시판 동적 생성
+- 파일 관리 첨부파일 및 썸네일 이미지 업로드/다운로드
+- 인증/인가 JWT 기반 Spring Security 인증
+- 권한별 API 분리 (Public / Admin)
+- 동적 필드 게시판별 최대 5개의 커스텀 필드(sub1~sub5) 지원
 
 ## 🛠 기술 스택
 
-- **Java 21**
-- **Spring Boot 3.5.7**
-- **Spring Data JPA**
-- **Spring Security + JWT**
-- **MySQL 8.x**
-- **Lombok**
-- **Gradle**
+- Java 21
+- Spring Boot 3.5.7
+- Spring Data JPA, MySQL 8.x
+- Spring Security + JWT
+- Gradle
 
 ## 📁 프로젝트 구조
 
 ```
 src/main/java/com/ai/
-├── AiApplication.java
 ├── api/
-│   ├── auth/                       # 인증/인가
+│   ├── auth/                    # 인증/인가
 │   │   ├── controller/
-│   │   │   ├── AuthController.java
-│   │   │   └── TestController.java
 │   │   ├── domain/
-│   │   │   ├── AdminRole.java
-│   │   │   └── User.java
 │   │   ├── dto/
-│   │   │   ├── LoginDTO.java
-│   │   │   ├── SignUpDTO.java
-│   │   │   ├── TokenInfoDTO.java
-│   │   │   └── UserInfoDTO.java
 │   │   ├── repository/
-│   │   │   └── UserRepository.java
 │   │   └── service/
-│   │       └── AuthService.java
 │   │
-│   ├── board/                      # 게시판 메타데이터
+│   ├── board/                   # 게시판 메타데이터
 │   │   ├── controller/
-│   │   │   └── BoardController.java
+│   │   │   ├── admin/
+│   │   │   └── public/
 │   │   ├── domain/
 │   │   │   ├── Board.java
-│   │   │   ├── BoardCategory.java  # 게시판 카테고리 Enum
-│   │   │   └── BoardType.java      # 게시판 타입 Enum
+│   │   │   ├── BoardCategory.java   # 게시판 카테고리 Enum
+│   │   │   └── BoardType.java       # LIST, THUMBNAIL, FAQ, CALENDER
 │   │   ├── dto/
-│   │   │   ├── BoardReqDTO.java
-│   │   │   └── BoardResDTO.java
 │   │   ├── repository/
-│   │   │   └── BoardRepository.java
 │   │   └── service/
-│   │       └── BoardService.java
 │   │
-│   ├── post/                       # 게시글 관리
+│   ├── post/                    # 게시글
 │   │   ├── controller/
-│   │   │   ├── BasePostController.java      # 추상 컨트롤러
-│   │   │   ├── NoticeControllerBase.java    # 공지사항
-│   │   │   ├── BudgetControllerBase.java    # 예결산 공고
-│   │   │   ├── DonationControllerBase.java  # 기부금
-│   │   │   ├── SafetyControllerBase.java    # 안전·보건
-│   │   │   ├── RecruitmentControllerBase.java  # 취업정보
-│   │   │   ├── EtcControllerBase.java       # 기타
-│   │   │   ├── DataRoomControllerBase.java  # 자료실
-│   │   │   ├── MenualControllerBase.java    # 규정 및 메뉴얼
-│   │   │   ├── FaqControllerBase.java       # FAQ
-│   │   │   ├── ResearchControllerBase.java  # 연구성과
-│   │   │   ├── ProfessorControllerBase.java # 교수소개
-│   │   │   ├── GatheringControllerBase.java # 소모임
-│   │   │   ├── PrecautionControllerBase.java # 학부소식
-│   │   │   └── LabResearchControllerBase.java # 연구활동 소개
+│   │   │   ├── admin/           # CUD 전용 (관리자)
+│   │   │   │   ├── BasePostAdminController.java
+│   │   │   │   ├── NoticeAdminController.java
+│   │   │   │   ├── BudgetAdminController.java
+│   │   │   │   └── ...
+│   │   │   └── public/          # Read 전용 (공개)
+│   │   │       ├── BasePostPublicController.java
+│   │   │       ├── NoticePublicController.java
+│   │   │       ├── BudgetPublicController.java
+│   │   │       └── ...
 │   │   ├── domain/
-│   │   │   └── Post.java
 │   │   ├── dto/
-│   │   │   ├── PostReqDTO.java
-│   │   │   └── PostResDTO.java
 │   │   ├── repository/
-│   │   │   └── PostRepository.java
 │   │   └── service/
-│   │       └── PostService.java
 │   │
-│   └── resource/                   # 첨부파일 관리
+│   └── resource/                # 첨부파일
 │       ├── controller/
-│       │   └── AttachmentController.java
+│       │   ├── admin/
+│       │   └── public/
 │       ├── domain/
 │       │   ├── Attachment.java
-│       │   └── PostAttachment.java # Post-Attachment 중간 테이블
+│       │   └── PostAttachment.java
 │       ├── dto/
-│       │   └── AttachmentDTO.java
 │       ├── repository/
-│       │   ├── AttachmentRepository.java
-│       │   └── PostAttachmentRepository.java
 │       └── service/
-│           └── AttachmentService.java
 │
-└── common/                         # 공통 설정
+└── common/                      # 공통 모듈
     ├── config/
     │   └── SecurityConfig.java
+    ├── exception/               # 예외 처리
+    │   ├── GlobalExceptionHandler.java
+    │   ├── EntityNotFoundException.java
+    │   ├── DuplicateEntityException.java
+    │   ├── UnauthorizedException.java
+    │   ├── InvalidTokenException.java
+    │   ├── InvalidFileException.java
+    │   ├── FileStorageException.java
+    │   └── ErrorResponse.java
     ├── security/
     │   └── JwtAuthenticationFilter.java
     └── util/
@@ -142,7 +123,7 @@ VALUES
 ('FAQ', NULL, 'FAQ', '["교내연구지원", "지식재산권·기술이전", "창업지원"]', 10, NULL, NULL, NULL, NULL, NULL),
 ('연구성과', '연구성과', 'LIST', NULL, 10, NULL, NULL, NULL, NULL, NULL),
 ('교수소개', '교수소개', 'THUMBNAIL', '["전임교수", "교육·산학협력중점교수", "퇴임·명예교수"]', 10, '이메일', '연락처', '학력 및 경력', '담당과목', '위치'),
-('학사일정', '학사일정', NULL, NULL, 10, NULL, NULL, NULL, NULL, NULL),
+('학사일정', '학사일정', 'CALENDER', NULL, 10, NULL, NULL, NULL, NULL, NULL),
 ('소모임', '소모임', 'THUMBNAIL', NULL, 10, NULL, NULL, NULL, NULL, NULL),
 ('학부소식', '학부소식', 'LIST', NULL, 10, NULL, NULL, NULL, NULL, NULL),
 ('연구활동 소개', '연구활동 소개', 'THUMBNAIL', NULL, 9, 'link', NULL, NULL, NULL, NULL);
