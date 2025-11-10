@@ -8,6 +8,7 @@ import com.ai.api.board.repository.BoardRepository;
 import com.ai.api.post.repository.PostRepository;
 import com.ai.api.resource.domain.Attachment;
 import com.ai.api.resource.service.AttachmentService;
+import com.ai.common.exception.EntityNotFoundException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +30,10 @@ public class PostService {
     // BoardType 수정은 Post가 아닌 Board에서 진행됨
     // post에서는 모든 값을 저장하고 BoardType 따른 처리는 프론트에서 표시해줄 반환값에서 수행
 
+
     public Post createPost(PostReqDTO reqDTO) {
         Board board = boardRepository.findById(reqDTO.getBoardId())
-            .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + reqDTO.getBoardId()));
+            .orElseThrow(() -> new EntityNotFoundException("Board not found with ID: " + reqDTO.getBoardId()));
 
         // Board 설정에 따라 동적으로 Post 생성
         Post.PostBuilder<?, ?> builder = Post.builder()
@@ -107,13 +109,13 @@ public class PostService {
     public Post getPostById(Long id) {
         postRepository.incrementViewCount(id);
         return postRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Post not found with ID: " + id));
+            .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + id));
     }
 
 
     public Post updatePost(Long id, PostReqDTO reqDTO) {
         Post post = postRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Post not found with ID: " + id));
+            .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + id));
         Board board = post.getBoard();
 
         // 필드 업데이트
@@ -156,12 +158,9 @@ public class PostService {
         return updatePost;
     }
 
-    /**
-     * 게시글 삭제
-     */
     public void deletePost(Long id) {
         Post post = postRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Post not found with ID: " + id));
+            .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + id));
 
         if(post.getThumbnail() != null) {
             attachmentService.deleteAttachment(post.getThumbnail().getId());
@@ -174,12 +173,9 @@ public class PostService {
         postRepository.deleteById(id);
     }
 
-    /**
-     * 게시판 메타데이터 조회 (클라이언트가 폼을 그릴 때 사용)
-     */
     public Board getBoardMetadata(Long boardId) {
         return boardRepository.findById(boardId)
-            .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + boardId));
+            .orElseThrow(() -> new EntityNotFoundException("Board not found with ID: " + boardId));
     }
 
 

@@ -6,15 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/professor")
+@RequestMapping("/professors")
 public class ProfessorController extends BasePostController {
 
-    public ProfessorController(PostService postService) {
-        super(postService);
-    }
+    public ProfessorController(PostService postService) { super(postService); }
 
     @Override
-    protected BoardCategory getBoardCategory() {
-        return BoardCategory.PROFESSOR;
-    }
+    protected BoardCategory getBoardCategory() { return BoardCategory.PROFESSOR; }
 }

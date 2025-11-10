@@ -5,11 +5,16 @@ import com.ai.api.resource.domain.Attachment;
 import com.ai.api.resource.domain.PostAttachment;
 import com.ai.api.resource.repository.AttachmentRepository;
 import com.ai.api.resource.repository.PostAttachmentRepository;
+import com.ai.common.exception.EntityNotFoundException;
+import com.ai.common.exception.FileStorageException;
+import com.ai.common.exception.InvalidFileException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -28,17 +33,23 @@ public class AttachmentService {
     private final AttachmentRepository attachmentRepository;
     private final PostAttachmentRepository postAttachmentRepository;
 
+    private static final long MAX_FILE_SIZE = 300 * 1024; // 300KB
+    private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList(
+        "jpg", "jpeg", "png", "gif", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", ".png"
+    );
+
     @Value("${file.Lab-research-upload-dir}")
     private String uploadDir;
 
     // 파일 조회
     public Attachment getAttachment(Long attachmentId){
         return attachmentRepository.findById(attachmentId)
-            .orElseThrow(()->new RuntimeException("이미지를 찾을 수 없음"));
+            .orElseThrow(()->new EntityNotFoundException("이미지를 찾을 수 없음"));
     }
 
     // 파일 단일 저장( 썸네일 저장 )
     public Attachment saveAttachment(MultipartFile file) {
+        validateFile(file);
         Path path = Paths.get(uploadDir);
         try{
             String originalName = file.getOriginalFilename();
@@ -60,9 +71,9 @@ public class AttachmentService {
 
             return saveImage;
 
-        } catch (Exception e) {
-            log.error("file 업로드 로직 실패", e);
-            throw new RuntimeException(e);
+        } catch (IOException e) {
+            log.error("파일 업로드 실패: {}", file.getOriginalFilename(), e);
+            throw new FileStorageException("파일 저장에 실패했습니다: " + file.getOriginalFilename(), e);
         }
     }
 
@@ -130,9 +141,9 @@ public class AttachmentService {
             attachmentRepository.delete(existingAttachment);
             log.info("파일 삭제 로직 성공");
 
-        } catch (Exception e) {
-            log.info("파일 삭제 로직 실패", e);
-            throw new RuntimeException(e);
+        } catch (IOException e) {
+            log.error("파일 삭제 실패: {}", existingAttachment.getFilePath(), e);
+            throw new FileStorageException("파일 삭제에 실패했습니다: " + existingAttachment.getOriginalFileName(), e);
         }
     }
 
@@ -156,6 +167,35 @@ public class AttachmentService {
         }
     }
 
+    private void validateFile(MultipartFile file) {
+        if (file.isEmpty()) {
+            throw new InvalidFileException("파일이 비어있습니다");
+        }
+
+        if (file.getSize() > MAX_FILE_SIZE) {
+            throw new InvalidFileException(
+                String.format("파일 크기가 제한을 초과했습니다: %dKB (최대: 300KB)",
+                    file.getSize() / 1024));
+        }
+
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null || originalFilename.contains("..")) {
+            throw new InvalidFileException("잘못된 파일명입니다");
+        }
+
+        String extension = getFileExtension(originalFilename).toLowerCase();
+        if (!ALLOWED_EXTENSIONS.contains(extension)) {
+            throw new InvalidFileException(
+                String.format("허용되지 않은 파일 형식입니다: %s (허용: %s)",
+                    extension, String.join(", ", ALLOWED_EXTENSIONS)));
+        }
+
+        String contentType = file.getContentType();
+        if (contentType == null) {
+            throw new InvalidFileException("파일 타입을 확인할 수 없습니다");
+        }
+
+    }
 
     private String generateStoredFileName(String originalFileName) {
         String uuid = UUID.randomUUID().toString();
@@ -165,6 +205,13 @@ public class AttachmentService {
             extention = originalFileName.substring(originalFileName.lastIndexOf("."));
         }
         return uuid + extention;
+    }
+
+    private String getFileExtension(String filename) {
+        if (filename == null || !filename.contains(".")) {
+            return "";
+        }
+        return filename.substring(filename.lastIndexOf("."));
     }
 
 

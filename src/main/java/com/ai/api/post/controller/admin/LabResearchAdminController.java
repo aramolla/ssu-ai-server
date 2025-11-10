@@ -15,6 +15,6 @@ public class LabResearchAdminController extends BasePostAdminController {
 
     @Override
     protected BoardCategory getBoardCategory() {
-        return BoardCategory.GATHERING;
+        return BoardCategory.LAB_RESEARCH;
     }
 }

@@ -1,5 +1,6 @@
 package com.ai.common.util;
 
+import com.ai.common.exception.InvalidTokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import java.util.Arrays;
@@ -69,7 +70,7 @@ public class JwtUtil {
         Claims claims = parseClaims(token);
 
         if (claims.get("auth") == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            throw new InvalidTokenException("권한 정보가 없는 토큰입니다.");
         }
 
         Collection<? extends GrantedAuthority> authorities =
@@ -94,16 +95,19 @@ public class JwtUtil {
                 .build()
                 .parseClaimsJws(token);
             return true;
-        } catch (SecurityException | MalformedJwtException e) {
-            log.error("잘못된 JWT 서명입니다.");
+        } catch (SignatureException | MalformedJwtException e) {
+            log.error("잘못된 JWT 서명입니다: {}", e.getMessage());
+            throw new InvalidTokenException("잘못된 JWT 서명입니다");
         } catch (ExpiredJwtException e) {
-            log.error("만료된 JWT 토큰입니다.");
+            log.error("만료된 JWT 토큰입니다: {}", e.getMessage());
+            throw new InvalidTokenException("만료된 JWT 토큰입니다");
         } catch (UnsupportedJwtException e) {
-            log.error("지원되지 않는 JWT 토큰입니다.");
+            log.error("지원되지 않는 JWT 토큰입니다: {}", e.getMessage());
+            throw new InvalidTokenException("지원되지 않는 JWT 토큰입니다");
         } catch (IllegalArgumentException e) {
-            log.error("JWT 토큰이 잘못되었습니다.");
+            log.error("JWT 토큰이 잘못되었습니다: {}", e.getMessage());
+            throw new InvalidTokenException("JWT 토큰이 잘못되었습니다");
         }
-        return false;
     }
 
 

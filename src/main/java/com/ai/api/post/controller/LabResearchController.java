@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/lab-research")
 public class LabResearchController extends BasePostController {
 
-    public LabResearchController(PostService postService) {
-        super(postService);
-    }
+    public LabResearchController(PostService postService) { super(postService);}
 
     @Override
     protected BoardCategory getBoardCategory() {

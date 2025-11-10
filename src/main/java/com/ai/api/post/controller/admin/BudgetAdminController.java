@@ -15,6 +15,6 @@ public class BudgetAdminController extends BasePostAdminController {
 
     @Override
     protected BoardCategory getBoardCategory() {
-        return BoardCategory.NOTICE;
+        return BoardCategory.BUDGET;
     }
 }

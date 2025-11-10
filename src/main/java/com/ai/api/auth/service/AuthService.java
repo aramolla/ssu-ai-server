@@ -8,6 +8,10 @@ import com.ai.api.auth.dto.RefreshTokenDTO;
 import com.ai.api.auth.dto.SignUpDTO;
 import com.ai.api.auth.dto.TokenInfoDTO;
 import com.ai.api.auth.dto.UserInfoDTO;
+import com.ai.common.exception.DuplicateEntityException;
+import com.ai.common.exception.EntityNotFoundException;
+import com.ai.common.exception.InvalidTokenException;
+import com.ai.common.exception.UnauthorizedException;
 import com.ai.common.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +35,7 @@ public class AuthService {
     public UserInfoDTO signUp(SignUpDTO request) {
         // 아이디 중복 체크
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("이미 존재하는 아이디입니다.");
+            throw new DuplicateEntityException("이미 존재하는 아이디입니다.");
         }
 
         // 사용자 생성
@@ -55,11 +59,11 @@ public class AuthService {
     public TokenInfoDTO login(LoginDTO request) {
         // 사용자 조회
         User user = userRepository.findByUsername(request.getUsername())
-            .orElseThrow(() -> new RuntimeException("아이디 또는 비밀번호가 올바르지 않습니다."));
+            .orElseThrow(() -> new UnauthorizedException("아이디 또는 비밀번호가 올바르지 않습니다."));
 
         // 비밀번호 검증
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("아이디 또는 비밀번호가 올바르지 않습니다.");
+            throw new UnauthorizedException("아이디 또는 비밀번호가 올바르지 않습니다.");
         }
 
         // Authentication 객체 생성
@@ -91,12 +95,12 @@ public class AuthService {
     public TokenInfoDTO refreshAccessToken(RefreshTokenDTO request) {
         // Refresh Token 유효성 검증
         if (!jwtUtil.validateToken(request.getRefreshToken())) {
-            throw new RuntimeException("유효하지 않은 Refresh Token입니다.");
+            throw new InvalidTokenException("유효하지 않은 Refresh Token입니다.");
         }
 
         // Refresh Token으로 사용자 조회
         User user = userRepository.findByRefreshToken(request.getRefreshToken())
-            .orElseThrow(() -> new RuntimeException("Refresh Token을 찾을 수 없습니다."));
+            .orElseThrow(() -> new EntityNotFoundException("Refresh Token을 찾을 수 없습니다."));
 
         // 새로운 Access Token 생성
         Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -120,7 +124,7 @@ public class AuthService {
     // 로그아웃
     public void logout(String username) {
         User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+            .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
 
         user.setRefreshToken(null);
         userRepository.save(user);
@@ -129,7 +133,7 @@ public class AuthService {
     // 현재 사용자 정보 조회
     public UserInfoDTO getCurrentUser(String username) {
         User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+            .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
 
         return UserInfoDTO.builder()
             .id(user.getId())

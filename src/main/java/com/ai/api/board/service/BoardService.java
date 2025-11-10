@@ -4,6 +4,7 @@ import com.ai.api.board.domain.Board;
 import com.ai.api.board.dto.BoardReqDTO;
 import com.ai.api.board.repository.BoardRepository;
 import com.ai.api.resource.service.AttachmentService;
+import com.ai.common.exception.EntityNotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class BoardService {
 
     public Board getBoardById(Long id) {
         return boardRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + id));
+            .orElseThrow(() -> new EntityNotFoundException("Board not found with ID: " + id));
     }
 
     public Board saveBoard(BoardReqDTO reqDTO) {
@@ -51,7 +52,7 @@ public class BoardService {
 
     public Board updateBoard(Long id, BoardReqDTO reqDTO) {
         Board board = boardRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + id));
+            .orElseThrow(() -> new EntityNotFoundException("Board not found with ID: " + id));
 
         // Dirty Checking을 이용하여 필드 업데이트
         board.setTitle(reqDTO.getTitle());
@@ -75,7 +76,7 @@ public class BoardService {
 
     public void deleteBoard(Long id) {
         if (!boardRepository.existsById(id)) {
-            throw new IllegalArgumentException("Board not found with ID: " + id);
+            throw new EntityNotFoundException("Board not found with ID: " + id);
         }
         log.info("게시판 메타데이터 삭제 (ID: {})", id);
         boardRepository.deleteById(id);
