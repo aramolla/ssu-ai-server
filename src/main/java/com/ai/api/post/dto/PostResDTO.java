@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PostResDTO {
     private Long boardId;
+    private String boardEnName;
     private String boardTitle;
     private BoardType boardType;
     // Posts 공통 필드
@@ -76,6 +77,7 @@ public class PostResDTO {
         return PostResDTO.builder()
             .id(post.getId())
             .boardId(board.getId())
+            .boardEnName(board.getBoardEnName())
             .boardTitle(board.getTitle())
             .boardType(post.getBoard().getBoardType())
             .title(post.getTitle())

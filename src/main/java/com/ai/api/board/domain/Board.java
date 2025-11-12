@@ -32,6 +32,9 @@ public class Board {
     @Column(unique = true, nullable = false)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String boardEnName;
+
     @Column(nullable = false)
     private String title;
 

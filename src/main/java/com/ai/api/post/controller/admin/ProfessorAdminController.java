@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/admin/professors")
+@RequestMapping("/admin/professor")
 public class ProfessorAdminController extends BasePostAdminController {
 
     public ProfessorAdminController(PostService postService) {

@@ -122,12 +122,21 @@ public class AuthService {
     }
 
     // 로그아웃
-    public void logout(String username) {
+    public void logoutByUsername(String username) {
         User user = userRepository.findByUsername(username)
             .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
 
         user.setRefreshToken(null);
         userRepository.save(user);
+    }
+
+    public void logoutByRefreshToken(String refreshToken) {
+        // Refresh Token으로 사용자 조회 (없으면 저장)
+        userRepository.findByRefreshToken(refreshToken)
+            .ifPresent(user -> {
+                user.setRefreshToken(null);
+                userRepository.save(user);
+            });
     }
 
     // 현재 사용자 정보 조회

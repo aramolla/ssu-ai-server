@@ -12,6 +12,7 @@ import lombok.Data;
 public class BoardResDTO {
 
     private Long id;
+    private String boardEnName;
     private String title;
     private String content;
     private BoardType boardType; // LIST, THUMBNAIIL, FAQ, COMPANY
@@ -28,6 +29,7 @@ public class BoardResDTO {
     public static BoardResDTO from(Board board) {
         return BoardResDTO.builder()
             .id(board.getId())
+            .boardEnName(board.getBoardEnName())
             .title(board.getTitle())
             .content(board.getContent())
             .boardType(board.getBoardType())

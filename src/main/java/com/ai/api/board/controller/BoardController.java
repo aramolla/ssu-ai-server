@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/boards")
+@RequestMapping("/admin/boards")
 @RequiredArgsConstructor
 @Slf4j
 public class BoardController {
@@ -45,26 +45,29 @@ public class BoardController {
     }
 
 
-    @GetMapping("/{boardId}")
-    public ResponseEntity<BoardResDTO> getBoardDetail(@PathVariable Long boardId) {
-        Board board = boardService.getBoardById(boardId);
-        log.info("게시판 상세 조회 완료 (ID: {})", boardId);
+    @GetMapping("/{boardEnName}")
+    public ResponseEntity<BoardResDTO> getBoardDetail(@PathVariable String boardEnName) {
+        Board board = boardService.getBoardByBoardEnName(boardEnName);
+        log.info("게시판 상세 조회 완료 (boardEnName: {})", boardEnName);
         return ResponseEntity.ok(BoardResDTO.from(board));
     }
 
 
-    @PutMapping("/{boardId}")
-    public ResponseEntity<BoardResDTO> updateBoard(@PathVariable Long boardId, @RequestBody BoardReqDTO reqDTO) {
-        log.info("게시판 수정 요청 (ID: {})", boardId);
-        Board updatedBoard = boardService.updateBoard(boardId, reqDTO);
+    @PutMapping("/{boardEnName}")
+    public ResponseEntity<BoardResDTO> updateBoard(
+        @PathVariable String boardEnName,
+        @RequestBody BoardReqDTO reqDTO
+    ) {
+        log.info("게시판 수정 요청 (boardEnName: {})", boardEnName);
+        Board updatedBoard = boardService.updateBoard(boardEnName, reqDTO);
         return ResponseEntity.ok(BoardResDTO.from(updatedBoard));
     }
 
 
-    @DeleteMapping("/{boardId}")
-    public ResponseEntity<Void> deleteBoard(@PathVariable Long boardId) {
-        boardService.deleteBoard(boardId);
-        log.warn("게시판 삭제 완료 (ID: {})", boardId);
+    @DeleteMapping("/{boardEnName}")
+    public ResponseEntity<Void> deleteBoard(@PathVariable String boardEnName) {
+        boardService.deleteBoard(boardEnName);
+        log.warn("게시판 삭제 완료 (boardEnName: {})", boardEnName);
         return ResponseEntity.noContent().build();
     }
 }

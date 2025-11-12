@@ -10,6 +10,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class BoardReqDTO {
 
+    private String boardEnName;
     private String title;
     private String content;
     private BoardType boardType; // LIST, THUMBNAIIL, FAQ, COMPANY

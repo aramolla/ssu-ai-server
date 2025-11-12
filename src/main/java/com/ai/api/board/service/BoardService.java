@@ -25,9 +25,9 @@ public class BoardService {
         return boardRepository.findAll(pageable).getContent();
     }
 
-    public Board getBoardById(Long id) {
-        return boardRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Board not found with ID: " + id));
+    public Board getBoardByBoardEnName(String boardEnName) {
+        return boardRepository.findByBoardEnName(boardEnName)
+            .orElseThrow(() -> new EntityNotFoundException("Board not found with boardEnName: " + boardEnName));
     }
 
     public Board saveBoard(BoardReqDTO reqDTO) {
@@ -50,9 +50,9 @@ public class BoardService {
     }
 
 
-    public Board updateBoard(Long id, BoardReqDTO reqDTO) {
-        Board board = boardRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Board not found with ID: " + id));
+    public Board updateBoard(String boardEnName, BoardReqDTO reqDTO) {
+        Board board = boardRepository.findByBoardEnName(boardEnName)
+            .orElseThrow(() -> new EntityNotFoundException("Board not found with boardEnName: " + boardEnName));
 
         // Dirty Checking을 이용하여 필드 업데이트
         board.setTitle(reqDTO.getTitle());
@@ -69,17 +69,17 @@ public class BoardService {
         board.setSub4Label(reqDTO.getSub4Label());
         board.setSub5Label(reqDTO.getSub5Label());
 
-        log.info("게시판 메타데이터 수정 완료 (ID: {})", id);
+        log.info("게시판 메타데이터 수정 완료 (boardEnName: {})", boardEnName);
         return board;
     }
 
 
-    public void deleteBoard(Long id) {
-        if (!boardRepository.existsById(id)) {
-            throw new EntityNotFoundException("Board not found with ID: " + id);
+    public void deleteBoard(String boardEnName) {
+        if (!boardRepository.existsByBoardEnName(boardEnName)) {
+            throw new EntityNotFoundException("Board not found with boardEnName: " + boardEnName);
         }
-        log.info("게시판 메타데이터 삭제 (ID: {})", id);
-        boardRepository.deleteById(id);
+        log.info("게시판 메타데이터 삭제 (boardEnName: {})", boardEnName);
+        boardRepository.deleteByBoardEnName(boardEnName);
     }
 
 }
