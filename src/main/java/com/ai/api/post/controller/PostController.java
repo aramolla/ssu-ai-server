@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -28,7 +29,7 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostResDTO>> getPosts(
+    public ResponseEntity<Page<PostResDTO>> getPosts(
         @PathVariable String boardEnName,
         @RequestParam(required = false) String category,
         @RequestParam(required = false) String keyword,
@@ -51,13 +52,13 @@ public class PostController {
             pageable.getSort()
         );
 
-        List<PostResDTO> postList = postService.getPosts(
-                boardId, category, keyword, userPageable)
-            .stream()
-            .map(PostResDTO::from)
-            .collect(Collectors.toList());
+        Page<Post> postPage = postService.getPosts(
+                boardId, category, keyword, userPageable);
 
-        return ResponseEntity.ok(postList);
+        Page<PostResDTO> postResPage = postPage.map(PostResDTO::from);
+
+
+        return ResponseEntity.ok(postResPage);
     }
 
     @GetMapping("/{id}")
