@@ -32,25 +32,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Value("${jwt.cookie.access-token.name}")
     private String accessTokenCookieName;
 
-    private final AntPathMatcher pathMatcher = new AntPathMatcher();
-    private static final List<String> EXCLUDE_PATHS = Arrays.asList(
-        "/auth/login",
-        "/auth/signup",
-        "/auth/refresh"
-    );
-
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        String requestURI = request.getRequestURI();
-        // /auth/로 시작하는 모든 경로는 필터를 건너뜁니다.
-        return EXCLUDE_PATHS.stream()
-            .anyMatch(path -> pathMatcher.match(path, requestURI));
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
         HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
+
+        String path = request.getRequestURI();
+
+        if (!path.startsWith("/admin")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         try {
             String token = cookieUtil.getCookie(request, accessTokenCookieName);
