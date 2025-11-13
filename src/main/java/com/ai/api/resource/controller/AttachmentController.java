@@ -57,4 +57,29 @@ public class AttachmentController {
         }
     }
 
+    @GetMapping("/image/{attachmentId}")
+    public ResponseEntity<Resource> viewImage(@PathVariable("attachmentId") Long attachmentId) {
+        try {
+            Attachment attachment = attachmentService.getAttachment(attachmentId);
+            Path path = Paths.get(attachment.getFilePath());
+            Resource resource = new UrlResource(path.toUri());
+
+            if (!resource.exists()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            String contentType = attachment.getContentType();
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(resource);
+        } catch (Exception e) {
+            log.error("이미지 조회 실패: {}", attachmentId, e);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

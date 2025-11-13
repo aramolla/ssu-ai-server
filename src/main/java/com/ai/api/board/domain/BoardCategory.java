@@ -13,7 +13,7 @@ public enum BoardCategory {
     RECRUITMENT("취업정보", 5L, "recruitment"),
     ETC("기타", 6L, "etc"),
     DATAROOM("자료실", 7L, "dataroom"),
-    MENUAL("규정 및 메뉴얼", 8L, "manual"),
+    MENUAL("규정 및 메뉴얼", 8L, "menual"),
     FAQ("FAQ", 9L, "faq"),
     RESEARCH("연구성과", 10L, "research"),
     PROFESSOR("교수진", 11L, "professor"),

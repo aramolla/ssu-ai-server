@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/admin/{boardEnName}")
+@RequestMapping("/admin/posts/{boardEnName}")
 @RequiredArgsConstructor
 @Slf4j
 public class PostAdminController {
@@ -28,7 +29,7 @@ public class PostAdminController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostResDTO>> getPosts(
+    public ResponseEntity<Page<PostResDTO>> getPosts(
         @PathVariable String boardEnName,
         @RequestParam(required = false) String category,
         @RequestParam(required = false) String keyword,
@@ -37,13 +38,12 @@ public class PostAdminController {
         BoardCategory boardCategory = getBoardCategory(boardEnName);
         log.info("{} 게시판 전체 조회", boardCategory.getTitle());
 
-        List<PostResDTO> postList = postService.getPosts(
-                boardCategory.getId(), category, keyword, pageable)
-            .stream()
-            .map(PostResDTO::from)
-            .collect(Collectors.toList());
+        Page<Post> postPage = postService.getPosts(
+                boardCategory.getId(), category, keyword, pageable);
 
-        return ResponseEntity.ok(postList);
+        Page<PostResDTO> postResPage = postPage.map(PostResDTO::from);
+
+        return ResponseEntity.ok(postResPage);
     }
 
     @GetMapping("/{id}")

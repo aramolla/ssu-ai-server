@@ -70,7 +70,7 @@ public class PostResDTO {
             .collect(Collectors.toList());
 
         String thumbnailUrl = Optional.ofNullable(post.getThumbnail())
-            .map(Attachment::getFilePath)
+            .map(attachment -> "/uploads/" + attachment.getStoredFileName())
             .orElse(null);
 
 

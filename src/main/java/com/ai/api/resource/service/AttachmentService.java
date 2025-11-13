@@ -33,12 +33,12 @@ public class AttachmentService {
     private final AttachmentRepository attachmentRepository;
     private final PostAttachmentRepository postAttachmentRepository;
 
-    private static final long MAX_FILE_SIZE = 300 * 1024; // 300KB
+    private static final long MAX_FILE_SIZE = 300 * 1024 * 1024; // 300MB
     private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList(
-        "jpg", "jpeg", "png", "gif", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", ".png"
+        "jpg", "jpeg", "png", "gif", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", ".png", ".txt"
     );
 
-    @Value("${file.Lab-research-upload-dir}")
+    @Value("${file.upload.path}")
     private String uploadDir;
 
     // 파일 조회
